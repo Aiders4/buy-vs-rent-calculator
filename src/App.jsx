@@ -65,26 +65,62 @@ function App() {
   const monthlyOwnershipExtra = (values.homePrice * values.annualOwnershipPercent) / 100 / 12;
   const totalMonthlyOwnership = monthlyMortgage + monthlyOwnershipExtra;
 
+  // Closing costs are paid at purchase (year 0)
+  const closingCost = values.homePrice * (values.closingCostsPercent / 100);
+  
   const years = Array.from({ length: values.timeHorizon + 1 }, (_, i) => i);
   const buyNetWorth = [];
   const rentNetWorth = [];
 
   let currentRent = values.initialRent;
   let cumulativeSavings = 0;
+  let remainingLoanBalance = loanAmount;
 
   for (let year = 0; year <= values.timeHorizon; year++) {
+    // Calculate home value with appreciation
     const homeValue = values.homePrice * Math.pow(1 + values.homeAppreciation / 100, year);
+    
+    // Calculate remaining loan balance after payments
+    // Formula: B = P * ((1+r)^n - (1+r)^p) / ((1+r)^n - 1)
+    // where P = principal, r = monthly rate, n = total payments, p = payments made
+    if (year > 0 && monthlyRate > 0) {
+      const paymentsMade = year * 12;
+      const remainingPayments = Math.max(0, numPayments - paymentsMade);
+      if (remainingPayments > 0) {
+        remainingLoanBalance = loanAmount * 
+          (Math.pow(1 + monthlyRate, numPayments) - Math.pow(1 + monthlyRate, paymentsMade)) /
+          (Math.pow(1 + monthlyRate, numPayments) - 1);
+      } else {
+        remainingLoanBalance = 0;
+      }
+    }
+    
+    // Selling costs only apply at final year
     const sellingCost = year === values.timeHorizon ? homeValue * (values.sellingCostsPercent / 100) : 0;
-    const closingCost = year === values.timeHorizon ? values.homePrice * (values.closingCostsPercent / 100) : 0;
-    const cumulativeExtra = monthlyOwnershipExtra * 12 * year;
-
-    const buyNet = homeValue - loanAmount - sellingCost - closingCost - cumulativeExtra + values.downPayment;
+    
+    // Cumulative ownership costs (property taxes, insurance, maintenance)
+    const cumulativeOwnershipCosts = monthlyOwnershipExtra * 12 * year;
+    
+    // Buy scenario net worth:
+    // Home value - remaining loan balance - selling costs - closing costs (paid upfront)
+    // Note: Down payment is already equity in the home, so it's included in (homeValue - remainingLoanBalance)
+    const buyNet = homeValue - remainingLoanBalance - sellingCost - (year === 0 ? closingCost : 0) - cumulativeOwnershipCosts;
     buyNetWorth.push(Math.round(Math.max(0, buyNet)));
 
-    const investedDown = values.downPayment * Math.pow(1 + values.investmentReturn / 100, year);
-    const yearlySavings = Math.max(0, totalMonthlyOwnership * 12 - currentRent * 12);
-    cumulativeSavings = (cumulativeSavings + yearlySavings) * (1 + values.investmentReturn / 100);
-    rentNetWorth.push(Math.round(investedDown + cumulativeSavings));
+    // Rent scenario: invest down payment + closing costs that would have been spent on buying
+    const initialInvestment = values.downPayment + closingCost;
+    const investedInitial = initialInvestment * Math.pow(1 + values.investmentReturn / 100, year);
+    
+    // Calculate yearly savings (difference between ownership cost and rent)
+    // Only calculate savings for completed years (year > 0)
+    if (year > 0) {
+      const yearlySavings = Math.max(0, totalMonthlyOwnership * 12 - currentRent * 12);
+      // Compound savings: previous savings plus new savings, all growing at investment return rate
+      // This approximates monthly investing by compounding annually
+      cumulativeSavings = (cumulativeSavings + yearlySavings) * (1 + values.investmentReturn / 100);
+    }
+    
+    rentNetWorth.push(Math.round(investedInitial + cumulativeSavings));
 
     if (year < values.timeHorizon) currentRent *= (1 + values.rentIncrease / 100);
   }
