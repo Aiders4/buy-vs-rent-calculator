@@ -133,8 +133,8 @@ function App() {
   const chartData = {
     labels: years.map(y => `Year ${y}`),
     datasets: [
-      { label: 'Buy', data: buyNetWorth, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.2)', fill: true, tension: 0.4 },
-      { label: 'Rent & Invest', data: rentNetWorth, borderColor: '#16a34a', backgroundColor: 'rgba(22, 163, 74, 0.2)', fill: true, tension: 0.4 },
+      { label: 'Buy', data: buyNetWorth, borderColor: '#5171a5', backgroundColor: 'rgba(81, 113, 165, 0.2)', fill: true, tension: 0.4 },
+      { label: 'Rent & Invest', data: rentNetWorth, borderColor: '#a9e4ef', backgroundColor: 'rgba(169, 228, 239, 0.2)', fill: true, tension: 0.4 },
     ],
   };
 
@@ -142,68 +142,134 @@ function App() {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { position: 'top' },
-      title: { display: true, text: 'Net Worth Growth Over Time', font: { size: 18 } },
+      legend: { 
+        position: 'top',
+        labels: {
+          color: '#2d1e2f'
+        }
+      },
+      title: { 
+        display: true, 
+        text: 'Net Worth Growth Over Time', 
+        font: { size: 18 },
+        color: '#2d1e2f'
+      },
       tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}` } },
     },
-    scales: { y: { ticks: { callback: v => '$' + v.toLocaleString() } } },
+    scales: { 
+      x: {
+        ticks: { color: '#2d1e2f' },
+        grid: { color: 'rgba(45, 30, 47, 0.1)' }
+      },
+      y: { 
+        ticks: { 
+          callback: v => '$' + v.toLocaleString(),
+          color: '#2d1e2f'
+        },
+        grid: { color: 'rgba(45, 30, 47, 0.1)' }
+      } 
+    },
   };
 
   const formatLabel = (key) => key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen py-8 px-4" style={{ backgroundColor: '#feeafa' }}>
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">
+        <h1 className="text-4xl font-bold text-center mb-12" style={{ color: '#2d1e2f' }}>
           Buy vs. Rent Calculator
         </h1>
 
         {/* Inputs at the top */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-12">
-          <h2 className="text-2xl font-semibold mb-6">Inputs</h2>
+        <div className="bg-white rounded-2xl shadow-xl p-8 mb-12" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
+          <h2 className="text-2xl font-semibold mb-6" style={{ color: '#2d1e2f' }}>Inputs</h2>
 
           {/* Core Inputs */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {['homePrice', 'downPayment', 'mortgageRate', 'mortgageTerm', 'homeAppreciation', 'initialRent', 'rentIncrease', 'investmentReturn', 'timeHorizon'].map(key => (
-              <div key={key}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {formatLabel(key)}
-                  {key.includes('Rate') || key.includes('Increase') ? ' (%)' : key.includes('Rent') || key.includes('Price') || key.includes('Payment') ? ' ($)' : ' (years)'}
-                </label>
-                <input
-                  type="number"
-                  step={key.includes('Rate') || key.includes('Increase') ? '0.1' : '1'}
-                  value={values[key]}
-                  onChange={handleChange(key)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            ))}
+            {['homePrice', 'downPayment', 'mortgageRate', 'mortgageTerm', 'homeAppreciation', 'initialRent', 'rentIncrease', 'investmentReturn', 'timeHorizon'].map(key => {
+              const isCurrency = key.includes('Rent') || key.includes('Price') || key.includes('Payment');
+              const isPercentage = key.includes('Rate') || key.includes('Increase') || key.includes('Appreciation') || key.includes('Return');
+              const isYears = key.includes('Term') || key.includes('Horizon');
+              
+              // Determine input width based on field type and max digits
+              // Currency: max 8 digits (e.g., 9,999,999)
+              // Percentage: max 3 digits (e.g., 100 or 7.5)
+              // Years: max 3 digits (e.g., 100)
+              let inputWidth = '43px'; // default for percentages (3 digits)
+              if (isCurrency) inputWidth = '73px'; // 8 digits
+              else if (isYears) inputWidth = '38px'; // 3 digits
+              else if (isPercentage) inputWidth = '43px'; // 3 digits
+
+              return (
+                <div key={key} className="flex items-center gap-4">
+                  <label className="text-sm font-medium flex-1" style={{ color: '#2d1e2f', textAlign: 'left' }}>
+                    {formatLabel(key)}
+                    {isPercentage ? ' (%)' : isCurrency ? ' ($)' : ' (years)'}
+                  </label>
+                  <input
+                    type="number"
+                    step={isPercentage ? '0.1' : '1'}
+                    max={isCurrency ? 99999999 : isYears ? 999 : 999}
+                    value={values[key]}
+                    onChange={handleChange(key)}
+                    className="px-3 py-2 rounded-lg focus:outline-none flex-shrink-0"
+                    style={{ 
+                      border: '1px solid rgba(81, 113, 165, 0.3)',
+                      color: '#2d1e2f',
+                      backgroundColor: '#ffffff',
+                      width: inputWidth,
+                      textAlign: 'right'
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = '#5171a5'}
+                    onBlur={(e) => e.target.style.borderColor = 'rgba(81, 113, 165, 0.3)'}
+                  />
+                </div>
+              );
+            })}
           </div>
 
           {/* Advanced Settings */}
           <div>
             <button
               onClick={() => setShowAdvanced(!showAdvanced)}
-              className="flex items-center gap-2 text-lg font-medium text-blue-600 hover:text-blue-800 mb-4"
+              className="flex items-center gap-2 text-lg font-medium mb-4"
+              style={{ 
+                color: '#5171a5',
+                backgroundColor: 'transparent',
+                border: 'none',
+                padding: 0,
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => e.target.style.color = '#3d5580'}
+              onMouseLeave={(e) => e.target.style.color = '#5171a5'}
             >
               Advanced Settings
               {showAdvanced ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
             </button>
 
             {showAdvanced && (
-              <div className="grid md:grid-cols-3 gap-6 pt-4 border-t border-gray-200">
+              <div className="grid md:grid-cols-3 gap-6 pt-4" style={{ borderTop: '1px solid rgba(169, 228, 239, 0.3)' }}>
                 {['closingCostsPercent', 'sellingCostsPercent', 'annualOwnershipPercent'].map(key => (
-                  <div key={key}>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <div key={key} className="flex items-center gap-4">
+                    <label className="text-sm font-medium flex-1" style={{ color: '#2d1e2f', textAlign: 'left' }}>
                       {formatLabel(key)} (%)
                     </label>
                     <input
                       type="number"
                       step="0.1"
+                      max="999"
                       value={values[key]}
                       onChange={handleChange(key)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="px-3 py-2 rounded-lg focus:outline-none flex-shrink-0"
+                      style={{ 
+                        border: '1px solid rgba(81, 113, 165, 0.3)',
+                        color: '#2d1e2f',
+                        backgroundColor: '#ffffff',
+                        width: '43px', // 3 digits max for percentage
+                        textAlign: 'right'
+                      }}
+                      onFocus={(e) => e.target.style.borderColor = '#5171a5'}
+                      onBlur={(e) => e.target.style.borderColor = 'rgba(81, 113, 165, 0.3)'}
                     />
                   </div>
                 ))}
@@ -215,7 +281,7 @@ function App() {
         {/* Results Below */}
         <div className="space-y-12">
           {/* Chart */}
-          <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="bg-white rounded-2xl shadow-xl p-8" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
             <div className="h-96">
               <Line data={chartData} options={chartOptions} />
             </div>
@@ -223,12 +289,23 @@ function App() {
 
           {/* Final Numbers */}
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-10 text-white text-center shadow-xl">
+            <div 
+              className="rounded-2xl p-10 text-white text-center shadow-xl"
+              style={{ 
+                background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)'
+              }}
+            >
               <p className="text-xl font-medium opacity-90">If You Buy</p>
               <p className="text-5xl font-bold mt-4">${finalBuy.toLocaleString()}</p>
               <p className="text-lg mt-4 opacity-80">after {values.timeHorizon} years</p>
             </div>
-            <div className="bg-gradient-to-br from-green-600 to-green-800 rounded-2xl p-10 text-white text-center shadow-xl">
+            <div 
+              className="rounded-2xl p-10 text-white text-center shadow-xl"
+              style={{ 
+                background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)',
+                border: '2px solid #a9e4ef'
+              }}
+            >
               <p className="text-xl font-medium opacity-90">If You Rent & Invest</p>
               <p className="text-5xl font-bold mt-4">${finalRent.toLocaleString()}</p>
               <p className="text-lg mt-4 opacity-80">after {values.timeHorizon} years</p>
@@ -236,12 +313,21 @@ function App() {
           </div>
 
           {/* Winner */}
-          <div className={`text-center py-12 px-8 rounded-2xl shadow-2xl ${difference > 0 ? 'bg-green-50' : 'bg-blue-50'}`}>
-            <p className="text-3xl font-bold text-gray-800">{winner} builds more wealth</p>
-            <p className={`text-6xl font-extrabold mt-6 ${difference > 0 ? 'text-green-600' : 'text-blue-600'}`}>
+          <div 
+            className="text-center py-12 px-8 rounded-2xl shadow-2xl"
+            style={{ 
+              backgroundColor: difference > 0 ? 'rgba(169, 228, 239, 0.4)' : 'rgba(254, 234, 250, 0.6)',
+              border: '2px solid #a9e4ef'
+            }}
+          >
+            <p className="text-3xl font-bold" style={{ color: '#2d1e2f' }}>{winner} builds more wealth</p>
+            <p 
+              className="text-6xl font-extrabold mt-6"
+              style={{ color: '#5171a5' }}
+            >
               by ${Math.abs(Math.round(difference)).toLocaleString()}
             </p>
-            <p className="text-xl text-gray-600 mt-6">over {values.timeHorizon} years</p>
+            <p className="text-xl mt-6" style={{ color: '#2d1e2f' }}>over {values.timeHorizon} years</p>
           </div>
         </div>
       </div>
