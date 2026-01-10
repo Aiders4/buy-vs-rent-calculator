@@ -174,7 +174,7 @@ function App() {
   const formatLabel = (key) => key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
 
   return (
-    <div className="min-h-screen py-8 px-4" style={{ backgroundColor: '#feeafa' }}>
+    <div className="min-h-screen py-8 px-4" style={{ backgroundColor: '#fff8f0' }}>
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-12" style={{ color: '#2d1e2f' }}>
           Buy vs. Rent Calculator
