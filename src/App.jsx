@@ -175,36 +175,84 @@ function App() {
   const formatLabel = (key) => key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
 
   return (
-    <div className="min-h-screen py-8 px-16" style={{ backgroundColor: '#fff8f0', paddingLeft: '16px', paddingRight: '16px' }}>
+    <div className="min-h-screen py-4 px-8" style={{ backgroundColor: '#fff8f0', paddingLeft: '8px', paddingRight: '8px' }}>
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-12" style={{ color: '#2d1e2f' }}>
+        <h1 className="text-3xl font-bold text-center mb-6" style={{ color: '#2d1e2f' }}>
           Buy vs. Rent Calculator
         </h1>
 
-        {/* Inputs and Results Side by Side */}
-        <div className="flex flex-col md:flex-row gap-8 mb-12" style={{ alignItems: 'flex-start' }}>
-          {/* Inputs Section */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 flex-shrink-0" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
-            <h2 className="text-2xl font-semibold mb-6" style={{ color: '#2d1e2f', textAlign: 'left' }}>Inputs</h2>
+        {/* Inputs Section */}
+        <div className="bg-white rounded-2xl shadow-xl p-6 mb-6" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
+          <h2 className="text-xl font-semibold mb-4" style={{ color: '#2d1e2f', textAlign: 'left' }}>Inputs</h2>
 
-            {/* Core Inputs */}
-            <div className="inputs-grid grid gap-6 mb-8">
-              {['homePrice', 'downPayment', 'mortgageRate', 'mortgageTerm', 'homeAppreciation', 'initialRent', 'rentIncrease', 'investmentReturn', 'timeHorizon'].map(key => {
-                const isCurrency = key.includes('Rent') || key.includes('Price') || key.includes('Payment');
-                const isPercentage = key.includes('Rate') || key.includes('Increase') || key.includes('Appreciation') || key.includes('Return');
-                const isYears = key.includes('Term') || key.includes('Horizon');
-                
-                return (
+          {/* Core Inputs */}
+          <div className="inputs-grid grid gap-4 mb-6">
+            {['homePrice', 'downPayment', 'mortgageRate', 'mortgageTerm', 'homeAppreciation', 'initialRent', 'rentIncrease', 'investmentReturn', 'timeHorizon'].map(key => {
+              const isCurrency = key.includes('Rent') || key.includes('Price') || key.includes('Payment');
+              const isPercentage = key.includes('Rate') || key.includes('Increase') || key.includes('Appreciation') || key.includes('Return');
+              const isYears = key.includes('Term') || key.includes('Horizon');
+              
+              return (
+                <div key={key} style={{ display: 'grid', gridTemplateColumns: '230px 12px 73px', alignItems: 'center' }}>
+                  <label className="text-sm font-medium" style={{ color: '#2d1e2f', textAlign: 'left' }}>
+                    {formatLabel(key)}
+                    {isPercentage ? ' (%)' : isCurrency ? ' ($)' : ' (years)'}
+                  </label>
+                  <div></div>
+                  <input
+                    type="number"
+                    step={isPercentage ? '0.1' : '1'}
+                    max={isCurrency ? 99999999 : isYears ? 999 : 999}
+                    value={values[key]}
+                    onChange={handleChange(key)}
+                    className="px-3 py-2 rounded-lg focus:outline-none"
+                    style={{ 
+                      border: '1px solid rgba(81, 113, 165, 0.3)',
+                      color: '#2d1e2f',
+                      backgroundColor: '#ffffff',
+                      width: '73px',
+                      textAlign: 'right'
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = '#5171a5'}
+                    onBlur={(e) => e.target.style.borderColor = 'rgba(81, 113, 165, 0.3)'}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Advanced Settings */}
+          <div style={{ textAlign: 'left' }}>
+            <button
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className="flex items-center gap-2 text-base font-medium mb-4"
+              style={{ 
+                color: '#5171a5',
+                backgroundColor: 'transparent',
+                border: 'none',
+                padding: 0,
+                cursor: 'pointer',
+                marginLeft: 0
+              }}
+              onMouseEnter={(e) => e.target.style.color = '#3d5580'}
+              onMouseLeave={(e) => e.target.style.color = '#5171a5'}
+            >
+              Advanced Settings
+              {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+
+            {showAdvanced && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4" style={{ borderTop: '1px solid rgba(169, 228, 239, 0.3)' }}>
+                {['closingCostsPercent', 'sellingCostsPercent', 'annualOwnershipPercent'].map(key => (
                   <div key={key} style={{ display: 'grid', gridTemplateColumns: '230px 12px 73px', alignItems: 'center' }}>
                     <label className="text-sm font-medium" style={{ color: '#2d1e2f', textAlign: 'left' }}>
-                      {formatLabel(key)}
-                      {isPercentage ? ' (%)' : isCurrency ? ' ($)' : ' (years)'}
+                      {formatLabel(key)} (%)
                     </label>
                     <div></div>
                     <input
                       type="number"
-                      step={isPercentage ? '0.1' : '1'}
-                      max={isCurrency ? 99999999 : isYears ? 999 : 999}
+                      step="0.1"
+                      max="999"
                       value={values[key]}
                       onChange={handleChange(key)}
                       className="px-3 py-2 rounded-lg focus:outline-none"
@@ -219,107 +267,70 @@ function App() {
                       onBlur={(e) => e.target.style.borderColor = 'rgba(81, 113, 165, 0.3)'}
                     />
                   </div>
-                );
-              })}
-            </div>
-
-            {/* Advanced Settings */}
-            <div style={{ textAlign: 'left' }}>
-              <button
-                onClick={() => setShowAdvanced(!showAdvanced)}
-                className="flex items-center gap-2 text-lg font-medium mb-4"
-                style={{ 
-                  color: '#5171a5',
-                  backgroundColor: 'transparent',
-                  border: 'none',
-                  padding: 0,
-                  cursor: 'pointer',
-                  marginLeft: 0
-                }}
-                onMouseEnter={(e) => e.target.style.color = '#3d5580'}
-                onMouseLeave={(e) => e.target.style.color = '#5171a5'}
-              >
-                Advanced Settings
-                {showAdvanced ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-              </button>
-
-              {showAdvanced && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4" style={{ borderTop: '1px solid rgba(169, 228, 239, 0.3)' }}>
-                  {['closingCostsPercent', 'sellingCostsPercent', 'annualOwnershipPercent'].map(key => (
-                    <div key={key} style={{ display: 'grid', gridTemplateColumns: '230px 12px 73px', alignItems: 'center' }}>
-                      <label className="text-sm font-medium" style={{ color: '#2d1e2f', textAlign: 'left' }}>
-                        {formatLabel(key)} (%)
-                      </label>
-                      <div></div>
-                      <input
-                        type="number"
-                        step="0.1"
-                        max="999"
-                        value={values[key]}
-                        onChange={handleChange(key)}
-                        className="px-3 py-2 rounded-lg focus:outline-none"
-                        style={{ 
-                          border: '1px solid rgba(81, 113, 165, 0.3)',
-                          color: '#2d1e2f',
-                          backgroundColor: '#ffffff',
-                          width: '73px',
-                          textAlign: 'right'
-                        }}
-                        onFocus={(e) => e.target.style.borderColor = '#5171a5'}
-                        onBlur={(e) => e.target.style.borderColor = 'rgba(81, 113, 165, 0.3)'}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Output Cards */}
-          <div className="flex flex-col gap-4" style={{ minWidth: '280px' }}>
-            <div 
-              className="rounded-2xl p-6 text-white text-center shadow-xl"
-              style={{ 
-                background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)'
-              }}
-            >
-              <p className="text-base font-medium opacity-90">If You Buy</p>
-              <p className="text-3xl font-bold mt-2">${finalBuy.toLocaleString()}</p>
-              <p className="text-sm mt-2 opacity-80">after {values.timeHorizon} years</p>
-            </div>
-            <div 
-              className="rounded-2xl p-6 text-white text-center shadow-xl"
-              style={{ 
-                background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)',
-                border: '2px solid #a9e4ef'
-              }}
-            >
-              <p className="text-base font-medium opacity-90">If You Rent & Invest</p>
-              <p className="text-3xl font-bold mt-2">${finalRent.toLocaleString()}</p>
-              <p className="text-sm mt-2 opacity-80">after {values.timeHorizon} years</p>
-            </div>
-            <div 
-              className="text-center py-6 px-6 rounded-2xl shadow-xl"
-              style={{ 
-                backgroundColor: difference > 0 ? 'rgba(169, 228, 239, 0.4)' : 'rgba(254, 234, 250, 0.6)',
-                border: '2px solid #a9e4ef'
-              }}
-            >
-              <p className="text-xl font-bold" style={{ color: '#2d1e2f' }}>{winner} builds more wealth</p>
-              <p 
-                className="text-4xl font-extrabold mt-3"
-                style={{ color: '#5171a5' }}
-              >
-                by ${Math.abs(Math.round(difference)).toLocaleString()}
-              </p>
-              <p className="text-base mt-3" style={{ color: '#2d1e2f' }}>over {values.timeHorizon} years</p>
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
+        {/* Output Cards */}
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '12px', marginBottom: '24px', flexWrap: 'nowrap' }}>
+            <div 
+              style={{ 
+                borderRadius: '12px',
+                padding: '10px 12px',
+                color: 'white',
+                textAlign: 'center',
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)',
+                flex: '0 0 auto',
+                width: '160px'
+              }}
+            >
+              <p style={{ fontSize: '12px', fontWeight: '500', opacity: 0.9, margin: 0 }}>If You Buy</p>
+              <p style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '4px', marginBottom: 0 }}>${finalBuy.toLocaleString()}</p>
+              <p style={{ fontSize: '11px', marginTop: '4px', marginBottom: 0, opacity: 0.8 }}>after {values.timeHorizon} years</p>
+            </div>
+            <div 
+              style={{ 
+                borderRadius: '12px',
+                padding: '10px 12px',
+                color: 'white',
+                textAlign: 'center',
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)',
+                border: '2px solid #a9e4ef',
+                flex: '0 0 auto',
+                width: '160px'
+              }}
+            >
+              <p style={{ fontSize: '12px', fontWeight: '500', opacity: 0.9, margin: 0 }}>If You Rent & Invest</p>
+              <p style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '4px', marginBottom: 0 }}>${finalRent.toLocaleString()}</p>
+              <p style={{ fontSize: '11px', marginTop: '4px', marginBottom: 0, opacity: 0.8 }}>after {values.timeHorizon} years</p>
+            </div>
+            <div 
+              style={{ 
+                borderRadius: '12px',
+                padding: '10px 12px',
+                textAlign: 'center',
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                backgroundColor: difference > 0 ? 'rgba(169, 228, 239, 0.4)' : 'rgba(254, 234, 250, 0.6)',
+                border: '2px solid #a9e4ef',
+                flex: '0 0 auto',
+                width: '160px'
+              }}
+            >
+              <p style={{ fontSize: '12px', fontWeight: 'bold', color: '#2d1e2f', margin: 0 }}>{winner} builds more wealth</p>
+              <p style={{ fontSize: '20px', fontWeight: '800', marginTop: '4px', marginBottom: 0, color: '#5171a5' }}>
+                by ${Math.abs(Math.round(difference)).toLocaleString()}
+              </p>
+              <p style={{ fontSize: '11px', marginTop: '4px', marginBottom: 0, color: '#2d1e2f' }}>over {values.timeHorizon} years</p>
+            </div>
+          </div>
+
         {/* Chart Below */}
-        <div className="bg-white rounded-2xl shadow-xl p-8" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
-          <div className="h-96">
+        <div className="bg-white rounded-2xl shadow-xl p-6" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
+          <div className="h-80">
             <Line data={chartData} options={chartOptions} />
           </div>
         </div>
