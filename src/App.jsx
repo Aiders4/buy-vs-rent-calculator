@@ -12,6 +12,7 @@ import {
   Filler,
 } from 'chart.js';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import './App.css';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
@@ -174,160 +175,152 @@ function App() {
   const formatLabel = (key) => key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
 
   return (
-    <div className="min-h-screen py-8 px-4" style={{ backgroundColor: '#fff8f0' }}>
+    <div className="min-h-screen py-8 px-16" style={{ backgroundColor: '#fff8f0', paddingLeft: '64px', paddingRight: '64px' }}>
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-12" style={{ color: '#2d1e2f' }}>
           Buy vs. Rent Calculator
         </h1>
 
-        {/* Inputs at the top */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-12" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: '#2d1e2f' }}>Inputs</h2>
+        {/* Inputs and Results Side by Side */}
+        <div className="flex flex-col md:flex-row gap-8 mb-12" style={{ alignItems: 'flex-start' }}>
+          {/* Inputs Section */}
+          <div className="bg-white rounded-2xl shadow-xl p-8 flex-shrink-0" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
+            <h2 className="text-2xl font-semibold mb-6" style={{ color: '#2d1e2f', textAlign: 'left' }}>Inputs</h2>
 
-          {/* Core Inputs */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {['homePrice', 'downPayment', 'mortgageRate', 'mortgageTerm', 'homeAppreciation', 'initialRent', 'rentIncrease', 'investmentReturn', 'timeHorizon'].map(key => {
-              const isCurrency = key.includes('Rent') || key.includes('Price') || key.includes('Payment');
-              const isPercentage = key.includes('Rate') || key.includes('Increase') || key.includes('Appreciation') || key.includes('Return');
-              const isYears = key.includes('Term') || key.includes('Horizon');
-              
-              // Determine input width based on field type and max digits
-              // Currency: max 8 digits (e.g., 9,999,999)
-              // Percentage: max 3 digits (e.g., 100 or 7.5)
-              // Years: max 3 digits (e.g., 100)
-              let inputWidth = '43px'; // default for percentages (3 digits)
-              if (isCurrency) inputWidth = '73px'; // 8 digits
-              else if (isYears) inputWidth = '38px'; // 3 digits
-              else if (isPercentage) inputWidth = '43px'; // 3 digits
-
-              return (
-                <div key={key} className="flex items-center gap-4">
-                  <label className="text-sm font-medium flex-1" style={{ color: '#2d1e2f', textAlign: 'left' }}>
-                    {formatLabel(key)}
-                    {isPercentage ? ' (%)' : isCurrency ? ' ($)' : ' (years)'}
-                  </label>
-                  <input
-                    type="number"
-                    step={isPercentage ? '0.1' : '1'}
-                    max={isCurrency ? 99999999 : isYears ? 999 : 999}
-                    value={values[key]}
-                    onChange={handleChange(key)}
-                    className="px-3 py-2 rounded-lg focus:outline-none flex-shrink-0"
-                    style={{ 
-                      border: '1px solid rgba(81, 113, 165, 0.3)',
-                      color: '#2d1e2f',
-                      backgroundColor: '#ffffff',
-                      width: inputWidth,
-                      textAlign: 'right'
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = '#5171a5'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(81, 113, 165, 0.3)'}
-                  />
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Advanced Settings */}
-          <div>
-            <button
-              onClick={() => setShowAdvanced(!showAdvanced)}
-              className="flex items-center gap-2 text-lg font-medium mb-4"
-              style={{ 
-                color: '#5171a5',
-                backgroundColor: 'transparent',
-                border: 'none',
-                padding: 0,
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => e.target.style.color = '#3d5580'}
-              onMouseLeave={(e) => e.target.style.color = '#5171a5'}
-            >
-              Advanced Settings
-              {showAdvanced ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-            </button>
-
-            {showAdvanced && (
-              <div className="grid md:grid-cols-3 gap-6 pt-4" style={{ borderTop: '1px solid rgba(169, 228, 239, 0.3)' }}>
-                {['closingCostsPercent', 'sellingCostsPercent', 'annualOwnershipPercent'].map(key => (
-                  <div key={key} className="flex items-center gap-4">
-                    <label className="text-sm font-medium flex-1" style={{ color: '#2d1e2f', textAlign: 'left' }}>
-                      {formatLabel(key)} (%)
+            {/* Core Inputs */}
+            <div className="inputs-grid grid gap-6 mb-8">
+              {['homePrice', 'downPayment', 'mortgageRate', 'mortgageTerm', 'homeAppreciation', 'initialRent', 'rentIncrease', 'investmentReturn', 'timeHorizon'].map(key => {
+                const isCurrency = key.includes('Rent') || key.includes('Price') || key.includes('Payment');
+                const isPercentage = key.includes('Rate') || key.includes('Increase') || key.includes('Appreciation') || key.includes('Return');
+                const isYears = key.includes('Term') || key.includes('Horizon');
+                
+                return (
+                  <div key={key} style={{ display: 'grid', gridTemplateColumns: '230px 12px 73px', alignItems: 'center' }}>
+                    <label className="text-sm font-medium" style={{ color: '#2d1e2f', textAlign: 'left' }}>
+                      {formatLabel(key)}
+                      {isPercentage ? ' (%)' : isCurrency ? ' ($)' : ' (years)'}
                     </label>
+                    <div></div>
                     <input
                       type="number"
-                      step="0.1"
-                      max="999"
+                      step={isPercentage ? '0.1' : '1'}
+                      max={isCurrency ? 99999999 : isYears ? 999 : 999}
                       value={values[key]}
                       onChange={handleChange(key)}
-                      className="px-3 py-2 rounded-lg focus:outline-none flex-shrink-0"
+                      className="px-3 py-2 rounded-lg focus:outline-none"
                       style={{ 
                         border: '1px solid rgba(81, 113, 165, 0.3)',
                         color: '#2d1e2f',
                         backgroundColor: '#ffffff',
-                        width: '43px', // 3 digits max for percentage
+                        width: '73px',
                         textAlign: 'right'
                       }}
                       onFocus={(e) => e.target.style.borderColor = '#5171a5'}
                       onBlur={(e) => e.target.style.borderColor = 'rgba(81, 113, 165, 0.3)'}
                     />
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+                );
+              })}
+            </div>
 
-        {/* Results Below */}
-        <div className="space-y-12">
-          {/* Chart */}
-          <div className="bg-white rounded-2xl shadow-xl p-8" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
-            <div className="h-96">
-              <Line data={chartData} options={chartOptions} />
+            {/* Advanced Settings */}
+            <div style={{ textAlign: 'left' }}>
+              <button
+                onClick={() => setShowAdvanced(!showAdvanced)}
+                className="flex items-center gap-2 text-lg font-medium mb-4"
+                style={{ 
+                  color: '#5171a5',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer',
+                  marginLeft: 0
+                }}
+                onMouseEnter={(e) => e.target.style.color = '#3d5580'}
+                onMouseLeave={(e) => e.target.style.color = '#5171a5'}
+              >
+                Advanced Settings
+                {showAdvanced ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+              </button>
+
+              {showAdvanced && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4" style={{ borderTop: '1px solid rgba(169, 228, 239, 0.3)' }}>
+                  {['closingCostsPercent', 'sellingCostsPercent', 'annualOwnershipPercent'].map(key => (
+                    <div key={key} style={{ display: 'grid', gridTemplateColumns: '230px 12px 73px', alignItems: 'center' }}>
+                      <label className="text-sm font-medium" style={{ color: '#2d1e2f', textAlign: 'left' }}>
+                        {formatLabel(key)} (%)
+                      </label>
+                      <div></div>
+                      <input
+                        type="number"
+                        step="0.1"
+                        max="999"
+                        value={values[key]}
+                        onChange={handleChange(key)}
+                        className="px-3 py-2 rounded-lg focus:outline-none"
+                        style={{ 
+                          border: '1px solid rgba(81, 113, 165, 0.3)',
+                          color: '#2d1e2f',
+                          backgroundColor: '#ffffff',
+                          width: '73px',
+                          textAlign: 'right'
+                        }}
+                        onFocus={(e) => e.target.style.borderColor = '#5171a5'}
+                        onBlur={(e) => e.target.style.borderColor = 'rgba(81, 113, 165, 0.3)'}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Final Numbers */}
-          <div className="grid md:grid-cols-2 gap-8">
+          {/* Output Cards */}
+          <div className="flex flex-col gap-4" style={{ minWidth: '280px' }}>
             <div 
-              className="rounded-2xl p-10 text-white text-center shadow-xl"
+              className="rounded-2xl p-6 text-white text-center shadow-xl"
               style={{ 
                 background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)'
               }}
             >
-              <p className="text-xl font-medium opacity-90">If You Buy</p>
-              <p className="text-5xl font-bold mt-4">${finalBuy.toLocaleString()}</p>
-              <p className="text-lg mt-4 opacity-80">after {values.timeHorizon} years</p>
+              <p className="text-base font-medium opacity-90">If You Buy</p>
+              <p className="text-3xl font-bold mt-2">${finalBuy.toLocaleString()}</p>
+              <p className="text-sm mt-2 opacity-80">after {values.timeHorizon} years</p>
             </div>
             <div 
-              className="rounded-2xl p-10 text-white text-center shadow-xl"
+              className="rounded-2xl p-6 text-white text-center shadow-xl"
               style={{ 
                 background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)',
                 border: '2px solid #a9e4ef'
               }}
             >
-              <p className="text-xl font-medium opacity-90">If You Rent & Invest</p>
-              <p className="text-5xl font-bold mt-4">${finalRent.toLocaleString()}</p>
-              <p className="text-lg mt-4 opacity-80">after {values.timeHorizon} years</p>
+              <p className="text-base font-medium opacity-90">If You Rent & Invest</p>
+              <p className="text-3xl font-bold mt-2">${finalRent.toLocaleString()}</p>
+              <p className="text-sm mt-2 opacity-80">after {values.timeHorizon} years</p>
+            </div>
+            <div 
+              className="text-center py-6 px-6 rounded-2xl shadow-xl"
+              style={{ 
+                backgroundColor: difference > 0 ? 'rgba(169, 228, 239, 0.4)' : 'rgba(254, 234, 250, 0.6)',
+                border: '2px solid #a9e4ef'
+              }}
+            >
+              <p className="text-xl font-bold" style={{ color: '#2d1e2f' }}>{winner} builds more wealth</p>
+              <p 
+                className="text-4xl font-extrabold mt-3"
+                style={{ color: '#5171a5' }}
+              >
+                by ${Math.abs(Math.round(difference)).toLocaleString()}
+              </p>
+              <p className="text-base mt-3" style={{ color: '#2d1e2f' }}>over {values.timeHorizon} years</p>
             </div>
           </div>
+        </div>
 
-          {/* Winner */}
-          <div 
-            className="text-center py-12 px-8 rounded-2xl shadow-2xl"
-            style={{ 
-              backgroundColor: difference > 0 ? 'rgba(169, 228, 239, 0.4)' : 'rgba(254, 234, 250, 0.6)',
-              border: '2px solid #a9e4ef'
-            }}
-          >
-            <p className="text-3xl font-bold" style={{ color: '#2d1e2f' }}>{winner} builds more wealth</p>
-            <p 
-              className="text-6xl font-extrabold mt-6"
-              style={{ color: '#5171a5' }}
-            >
-              by ${Math.abs(Math.round(difference)).toLocaleString()}
-            </p>
-            <p className="text-xl mt-6" style={{ color: '#2d1e2f' }}>over {values.timeHorizon} years</p>
+        {/* Chart Below */}
+        <div className="bg-white rounded-2xl shadow-xl p-8" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
+          <div className="h-96">
+            <Line data={chartData} options={chartOptions} />
           </div>
         </div>
       </div>
