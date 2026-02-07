@@ -131,8 +131,10 @@ function App() {
   const difference = finalRent - finalBuy;
   const winner = difference > 0 ? 'Rent & Invest' : 'Buy';
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   const chartData = {
-    labels: years.map(y => `Year ${y}`),
+    labels: years.map(y => isMobile ? `Yr ${y}` : `Year ${y}`),
     datasets: [
       { label: 'Buy', data: buyNetWorth, borderColor: '#5171a5', backgroundColor: 'rgba(81, 113, 165, 0.2)', fill: true, tension: 0.4 },
       { label: 'Rent & Invest', data: rentNetWorth, borderColor: '#a9e4ef', backgroundColor: 'rgba(169, 228, 239, 0.2)', fill: true, tension: 0.4 },
@@ -143,32 +145,42 @@ function App() {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { 
+      legend: {
         position: 'top',
         labels: {
-          color: '#2d1e2f'
+          color: '#2d1e2f',
+          font: { size: isMobile ? 11 : 12 }
         }
       },
-      title: { 
-        display: true, 
-        text: 'Net Worth Growth Over Time', 
-        font: { size: 18 },
+      title: {
+        display: true,
+        text: 'Net Worth Growth Over Time',
+        font: { size: isMobile ? 14 : 18 },
         color: '#2d1e2f'
       },
       tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}` } },
     },
-    scales: { 
+    scales: {
       x: {
-        ticks: { color: '#2d1e2f' },
-        grid: { color: 'rgba(45, 30, 47, 0.1)' }
-      },
-      y: { 
-        ticks: { 
-          callback: v => '$' + v.toLocaleString(),
-          color: '#2d1e2f'
+        ticks: {
+          color: '#2d1e2f',
+          font: { size: isMobile ? 10 : 12 },
+          maxRotation: isMobile ? 45 : 0,
         },
         grid: { color: 'rgba(45, 30, 47, 0.1)' }
-      } 
+      },
+      y: {
+        ticks: {
+          callback: v => {
+            if (isMobile && v >= 1000) return '$' + (v / 1000).toLocaleString() + 'k';
+            return '$' + v.toLocaleString();
+          },
+          color: '#2d1e2f',
+          font: { size: isMobile ? 10 : 12 },
+          maxTicksLimit: isMobile ? 6 : 8,
+        },
+        grid: { color: 'rgba(45, 30, 47, 0.1)' }
+      }
     },
   };
 
@@ -274,25 +286,25 @@ function App() {
         </div>
 
         {/* Output Cards */}
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '12px', marginBottom: '24px', flexWrap: 'nowrap' }}>
-            <div 
-              style={{ 
+        <div className="result-cards">
+            <div
+              className="result-card"
+              style={{
                 borderRadius: '12px',
                 padding: '10px 12px',
                 color: 'white',
                 textAlign: 'center',
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
                 background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)',
-                flex: '0 0 auto',
-                width: '160px'
               }}
             >
               <p style={{ fontSize: '12px', fontWeight: '500', opacity: 0.9, margin: 0 }}>If You Buy</p>
               <p style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '4px', marginBottom: 0 }}>${finalBuy.toLocaleString()}</p>
               <p style={{ fontSize: '11px', marginTop: '4px', marginBottom: 0, opacity: 0.8 }}>after {values.timeHorizon} years</p>
             </div>
-            <div 
-              style={{ 
+            <div
+              className="result-card"
+              style={{
                 borderRadius: '12px',
                 padding: '10px 12px',
                 color: 'white',
@@ -300,24 +312,21 @@ function App() {
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
                 background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)',
                 border: '2px solid #a9e4ef',
-                flex: '0 0 auto',
-                width: '160px'
               }}
             >
               <p style={{ fontSize: '12px', fontWeight: '500', opacity: 0.9, margin: 0 }}>If You Rent & Invest</p>
               <p style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '4px', marginBottom: 0 }}>${finalRent.toLocaleString()}</p>
               <p style={{ fontSize: '11px', marginTop: '4px', marginBottom: 0, opacity: 0.8 }}>after {values.timeHorizon} years</p>
             </div>
-            <div 
-              style={{ 
+            <div
+              className="result-card"
+              style={{
                 borderRadius: '12px',
                 padding: '10px 12px',
                 textAlign: 'center',
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
                 backgroundColor: difference > 0 ? 'rgba(169, 228, 239, 0.4)' : 'rgba(254, 234, 250, 0.6)',
                 border: '2px solid #a9e4ef',
-                flex: '0 0 auto',
-                width: '160px'
               }}
             >
               <p style={{ fontSize: '12px', fontWeight: 'bold', color: '#2d1e2f', margin: 0 }}>{winner} builds more wealth</p>
@@ -329,8 +338,8 @@ function App() {
           </div>
 
         {/* Chart Below */}
-        <div className="bg-white rounded-2xl shadow-xl p-6" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
-          <div className="h-80">
+        <div className="bg-white rounded-2xl shadow-xl chart-section" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
+          <div className="chart-height">
             <Line data={chartData} options={chartOptions} />
           </div>
         </div>

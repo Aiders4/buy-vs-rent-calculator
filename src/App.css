@@ -55,3 +55,46 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* Result cards - stack on mobile, row on desktop */
+.result-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.result-cards .result-card {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .result-cards {
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+  .result-cards .result-card {
+    width: 160px;
+    flex: 0 0 auto;
+  }
+}
+
+/* Chart section */
+.chart-section {
+  padding: 12px;
+}
+
+.chart-height {
+  height: 250px;
+}
+
+@media (min-width: 768px) {
+  .chart-section {
+    padding: 24px;
+  }
+
+  .chart-height {
+    height: 320px;
+  }
+}
