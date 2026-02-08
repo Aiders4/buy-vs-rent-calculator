@@ -195,10 +195,10 @@ function App() {
 
         {/* Inputs Section */}
         <div className="bg-white rounded-2xl shadow-xl p-6 mb-6" style={{ border: '1px solid #f3f4f6' }}>
-          <h2 className="font-semibold mb-4" style={{ color: '#1f2937', textAlign: 'left', fontSize: '26px' }}>Inputs</h2>
+          <h2 className="font-semibold" style={{ color: '#1f2937', textAlign: 'left', fontSize: '26px', marginTop: 0, marginBottom: '8px' }}>Inputs</h2>
 
           {/* Core Inputs */}
-          <div className="inputs-grid grid gap-4 mb-6">
+          <div className="inputs-grid grid mb-6">
             {['homePrice', 'downPayment', 'mortgageRate', 'mortgageTerm', 'homeAppreciation', 'initialRent', 'rentIncrease', 'investmentReturn', 'timeHorizon'].map(key => {
               const isCurrency = key.includes('Rent') || key.includes('Price') || key.includes('Payment');
               const isPercentage = key.includes('Rate') || key.includes('Increase') || key.includes('Appreciation') || key.includes('Return');
@@ -217,16 +217,7 @@ function App() {
                     max={isCurrency ? 99999999 : isYears ? 999 : 999}
                     value={values[key]}
                     onChange={handleChange(key)}
-                    className="px-3 py-2 rounded-lg focus:outline-none"
-                    style={{ 
-                      border: '1px solid rgba(37, 99, 235, 0.3)',
-                      color: '#1f2937',
-                      backgroundColor: '#ffffff',
-                      width: '73px',
-                      textAlign: 'right'
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = '#2563eb'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(37, 99, 235, 0.3)'}
+                    className="input-field"
                   />
                 </div>
               );
@@ -267,16 +258,7 @@ function App() {
                       max="999"
                       value={values[key]}
                       onChange={handleChange(key)}
-                      className="px-3 py-2 rounded-lg focus:outline-none"
-                      style={{ 
-                        border: '1px solid rgba(37, 99, 235, 0.3)',
-                        color: '#1f2937',
-                        backgroundColor: '#ffffff',
-                        width: '73px',
-                        textAlign: 'right'
-                      }}
-                      onFocus={(e) => e.target.style.borderColor = '#2563eb'}
-                      onBlur={(e) => e.target.style.borderColor = 'rgba(37, 99, 235, 0.3)'}
+                      className="input-field"
                     />
                   </div>
                 ))}

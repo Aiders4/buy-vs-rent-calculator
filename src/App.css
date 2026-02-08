@@ -44,6 +44,10 @@
   grid-template-columns: repeat(1, 1fr);
 }
 
+.inputs-grid > div {
+  margin-bottom: 4px;
+}
+
 @media (min-width: 768px) {
   .inputs-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -54,6 +58,28 @@
   .inputs-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+/* Input fields */
+.input-field {
+  width: 73px;
+  padding: 6px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  color: #1f2937;
+  background-color: #ffffff;
+  text-align: right;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-field:hover {
+  border-color: #d1d5db;
+}
+
+.input-field:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 /* Result cards - stack on mobile, row on desktop */
