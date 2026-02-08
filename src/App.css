@@ -11,10 +11,10 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #5171a5aa);
+  filter: drop-shadow(0 0 2em #2563ebaa);
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #a9e4efaa);
+  filter: drop-shadow(0 0 2em #10b981aa);
 }
 
 @keyframes logo-spin {
@@ -37,7 +37,7 @@
 }
 
 .read-the-docs {
-  color: #5171a5;
+  color: #2563eb;
 }
 
 .inputs-grid {

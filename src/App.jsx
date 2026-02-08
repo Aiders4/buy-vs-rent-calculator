@@ -136,8 +136,8 @@ function App() {
   const chartData = {
     labels: years.map(y => isMobile ? `Yr ${y}` : `Year ${y}`),
     datasets: [
-      { label: 'Buy', data: buyNetWorth, borderColor: '#5171a5', backgroundColor: 'rgba(81, 113, 165, 0.2)', fill: true, tension: 0.4 },
-      { label: 'Rent & Invest', data: rentNetWorth, borderColor: '#a9e4ef', backgroundColor: 'rgba(169, 228, 239, 0.2)', fill: true, tension: 0.4 },
+      { label: 'Buy', data: buyNetWorth, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.15)', fill: true, tension: 0.4 },
+      { label: 'Rent & Invest', data: rentNetWorth, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.15)', fill: true, tension: 0.4 },
     ],
   };
 
@@ -148,7 +148,7 @@ function App() {
       legend: {
         position: 'top',
         labels: {
-          color: '#2d1e2f',
+          color: '#1f2937',
           font: { size: isMobile ? 11 : 12 }
         }
       },
@@ -156,18 +156,18 @@ function App() {
         display: true,
         text: 'Net Worth Growth Over Time',
         font: { size: isMobile ? 14 : 18 },
-        color: '#2d1e2f'
+        color: '#1f2937'
       },
       tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}` } },
     },
     scales: {
       x: {
         ticks: {
-          color: '#2d1e2f',
+          color: '#1f2937',
           font: { size: isMobile ? 10 : 12 },
           maxRotation: isMobile ? 45 : 0,
         },
-        grid: { color: 'rgba(45, 30, 47, 0.1)' }
+        grid: { color: 'rgba(31, 41, 55, 0.1)' }
       },
       y: {
         ticks: {
@@ -175,11 +175,11 @@ function App() {
             if (isMobile && v >= 1000) return '$' + (v / 1000).toLocaleString() + 'k';
             return '$' + v.toLocaleString();
           },
-          color: '#2d1e2f',
+          color: '#1f2937',
           font: { size: isMobile ? 10 : 12 },
           maxTicksLimit: isMobile ? 6 : 8,
         },
-        grid: { color: 'rgba(45, 30, 47, 0.1)' }
+        grid: { color: 'rgba(31, 41, 55, 0.1)' }
       }
     },
   };
@@ -189,13 +189,13 @@ function App() {
   return (
     <div className="min-h-screen py-4 px-8" style={{ backgroundColor: '#fff8f0', paddingLeft: '8px', paddingRight: '8px' }}>
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-6" style={{ color: '#2d1e2f' }}>
+        <h1 className="text-3xl font-bold text-center mb-6" style={{ color: '#1f2937' }}>
           Buy vs. Rent Calculator
         </h1>
 
         {/* Inputs Section */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 mb-6" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
-          <h2 className="font-semibold mb-4" style={{ color: '#2d1e2f', textAlign: 'left', fontSize: '26px' }}>Inputs</h2>
+        <div className="bg-white rounded-2xl shadow-xl p-6 mb-6" style={{ border: '1px solid #f3f4f6' }}>
+          <h2 className="font-semibold mb-4" style={{ color: '#1f2937', textAlign: 'left', fontSize: '26px' }}>Inputs</h2>
 
           {/* Core Inputs */}
           <div className="inputs-grid grid gap-4 mb-6">
@@ -206,7 +206,7 @@ function App() {
               
               return (
                 <div key={key} style={{ display: 'grid', gridTemplateColumns: '230px 12px 73px', alignItems: 'center' }}>
-                  <label className="font-medium" style={{ color: '#2d1e2f', textAlign: 'left', fontSize: '15px' }}>
+                  <label className="font-medium" style={{ color: '#1f2937', textAlign: 'left', fontSize: '15px' }}>
                     {formatLabel(key)}
                     {isPercentage ? ' (%)' : isCurrency ? ' ($)' : ' (years)'}
                   </label>
@@ -219,14 +219,14 @@ function App() {
                     onChange={handleChange(key)}
                     className="px-3 py-2 rounded-lg focus:outline-none"
                     style={{ 
-                      border: '1px solid rgba(81, 113, 165, 0.3)',
-                      color: '#2d1e2f',
+                      border: '1px solid rgba(37, 99, 235, 0.3)',
+                      color: '#1f2937',
                       backgroundColor: '#ffffff',
                       width: '73px',
                       textAlign: 'right'
                     }}
-                    onFocus={(e) => e.target.style.borderColor = '#5171a5'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(81, 113, 165, 0.3)'}
+                    onFocus={(e) => e.target.style.borderColor = '#2563eb'}
+                    onBlur={(e) => e.target.style.borderColor = 'rgba(37, 99, 235, 0.3)'}
                   />
                 </div>
               );
@@ -239,25 +239,25 @@ function App() {
               onClick={() => setShowAdvanced(!showAdvanced)}
               className="flex items-center gap-2 text-base font-medium mb-4"
               style={{ 
-                color: '#5171a5',
+                color: '#2563eb',
                 backgroundColor: 'transparent',
                 border: 'none',
                 padding: 0,
                 cursor: 'pointer',
                 marginLeft: 0
               }}
-              onMouseEnter={(e) => e.target.style.color = '#3d5580'}
-              onMouseLeave={(e) => e.target.style.color = '#5171a5'}
+              onMouseEnter={(e) => e.target.style.color = '#1d4ed8'}
+              onMouseLeave={(e) => e.target.style.color = '#2563eb'}
             >
               Advanced Settings
               {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
 
             {showAdvanced && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4" style={{ borderTop: '1px solid rgba(169, 228, 239, 0.3)' }}>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4" style={{ borderTop: '1px solid #f3f4f6' }}>
                 {['closingCostsPercent', 'sellingCostsPercent', 'annualOwnershipPercent'].map(key => (
                   <div key={key} style={{ display: 'grid', gridTemplateColumns: '230px 12px 73px', alignItems: 'center' }}>
-                    <label className="font-medium" style={{ color: '#2d1e2f', textAlign: 'left', fontSize: '15px' }}>
+                    <label className="font-medium" style={{ color: '#1f2937', textAlign: 'left', fontSize: '15px' }}>
                       {formatLabel(key)} (%)
                     </label>
                     <div></div>
@@ -269,14 +269,14 @@ function App() {
                       onChange={handleChange(key)}
                       className="px-3 py-2 rounded-lg focus:outline-none"
                       style={{ 
-                        border: '1px solid rgba(81, 113, 165, 0.3)',
-                        color: '#2d1e2f',
+                        border: '1px solid rgba(37, 99, 235, 0.3)',
+                        color: '#1f2937',
                         backgroundColor: '#ffffff',
                         width: '73px',
                         textAlign: 'right'
                       }}
-                      onFocus={(e) => e.target.style.borderColor = '#5171a5'}
-                      onBlur={(e) => e.target.style.borderColor = 'rgba(81, 113, 165, 0.3)'}
+                      onFocus={(e) => e.target.style.borderColor = '#2563eb'}
+                      onBlur={(e) => e.target.style.borderColor = 'rgba(37, 99, 235, 0.3)'}
                     />
                   </div>
                 ))}
@@ -295,7 +295,7 @@ function App() {
                 color: 'white',
                 textAlign: 'center',
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)',
+                backgroundColor: '#2563eb',
               }}
             >
               <p style={{ fontSize: '12px', fontWeight: '600', opacity: 0.9, margin: 0 }}>If You Buy</p>
@@ -310,8 +310,7 @@ function App() {
                 color: 'white',
                 textAlign: 'center',
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)',
-                border: '2px solid #a9e4ef',
+                backgroundColor: '#10b981',
               }}
             >
               <p style={{ fontSize: '12px', fontWeight: '600', opacity: 0.9, margin: 0 }}>If You Rent & Invest</p>
@@ -325,20 +324,20 @@ function App() {
                 padding: '10px 12px',
                 textAlign: 'center',
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                backgroundColor: difference > 0 ? 'rgba(169, 228, 239, 0.4)' : 'rgba(254, 234, 250, 0.6)',
-                border: '2px solid #a9e4ef',
+                backgroundColor: difference > 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(37, 99, 235, 0.1)',
+                border: difference > 0 ? '2px solid rgba(16, 185, 129, 0.3)' : '2px solid rgba(37, 99, 235, 0.3)',
               }}
             >
-              <p style={{ fontSize: '12px', fontWeight: '600', color: '#2d1e2f', margin: 0 }}>{winner} builds more wealth</p>
-              <p style={{ fontSize: isMobile ? '46px' : '26px', fontWeight: '700', marginTop: '4px', marginBottom: 0, color: '#5171a5' }}>
+              <p style={{ fontSize: '12px', fontWeight: '600', color: '#1f2937', margin: 0 }}>{winner} builds more wealth</p>
+              <p style={{ fontSize: isMobile ? '46px' : '26px', fontWeight: '700', marginTop: '4px', marginBottom: 0, color: difference > 0 ? '#10b981' : '#2563eb' }}>
                 by ${Math.abs(Math.round(difference)).toLocaleString()}
               </p>
-              <p style={{ fontSize: '11px', marginTop: '4px', marginBottom: 0, color: '#2d1e2f' }}>over {values.timeHorizon} years</p>
+              <p style={{ fontSize: '11px', marginTop: '4px', marginBottom: 0, color: '#1f2937' }}>over {values.timeHorizon} years</p>
             </div>
           </div>
 
         {/* Chart Below */}
-        <div className="bg-white rounded-2xl shadow-xl chart-section" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
+        <div className="bg-white rounded-2xl shadow-xl chart-section" style={{ border: '1px solid #f3f4f6' }}>
           <div className="chart-height">
             <Line data={chartData} options={chartOptions} />
           </div>
