@@ -195,7 +195,7 @@ function App() {
 
         {/* Inputs Section */}
         <div className="bg-white rounded-2xl shadow-xl p-6 mb-6" style={{ border: '1px solid rgba(169, 228, 239, 0.3)' }}>
-          <h2 className="text-xl font-semibold mb-4" style={{ color: '#2d1e2f', textAlign: 'left' }}>Inputs</h2>
+          <h2 className="font-semibold mb-4" style={{ color: '#2d1e2f', textAlign: 'left', fontSize: '26px' }}>Inputs</h2>
 
           {/* Core Inputs */}
           <div className="inputs-grid grid gap-4 mb-6">
@@ -206,7 +206,7 @@ function App() {
               
               return (
                 <div key={key} style={{ display: 'grid', gridTemplateColumns: '230px 12px 73px', alignItems: 'center' }}>
-                  <label className="text-sm font-medium" style={{ color: '#2d1e2f', textAlign: 'left' }}>
+                  <label className="font-medium" style={{ color: '#2d1e2f', textAlign: 'left', fontSize: '15px' }}>
                     {formatLabel(key)}
                     {isPercentage ? ' (%)' : isCurrency ? ' ($)' : ' (years)'}
                   </label>
@@ -257,7 +257,7 @@ function App() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4" style={{ borderTop: '1px solid rgba(169, 228, 239, 0.3)' }}>
                 {['closingCostsPercent', 'sellingCostsPercent', 'annualOwnershipPercent'].map(key => (
                   <div key={key} style={{ display: 'grid', gridTemplateColumns: '230px 12px 73px', alignItems: 'center' }}>
-                    <label className="text-sm font-medium" style={{ color: '#2d1e2f', textAlign: 'left' }}>
+                    <label className="font-medium" style={{ color: '#2d1e2f', textAlign: 'left', fontSize: '15px' }}>
                       {formatLabel(key)} (%)
                     </label>
                     <div></div>
@@ -298,8 +298,8 @@ function App() {
                 background: 'linear-gradient(135deg, #5171a5 0%, #3d5580 100%)',
               }}
             >
-              <p style={{ fontSize: '12px', fontWeight: '500', opacity: 0.9, margin: 0 }}>If You Buy</p>
-              <p style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '4px', marginBottom: 0 }}>${finalBuy.toLocaleString()}</p>
+              <p style={{ fontSize: '12px', fontWeight: '600', opacity: 0.9, margin: 0 }}>If You Buy</p>
+              <p style={{ fontSize: isMobile ? '42px' : '24px', fontWeight: '600', marginTop: '4px', marginBottom: 0 }}>${finalBuy.toLocaleString()}</p>
               <p style={{ fontSize: '11px', marginTop: '4px', marginBottom: 0, opacity: 0.8 }}>after {values.timeHorizon} years</p>
             </div>
             <div
@@ -314,8 +314,8 @@ function App() {
                 border: '2px solid #a9e4ef',
               }}
             >
-              <p style={{ fontSize: '12px', fontWeight: '500', opacity: 0.9, margin: 0 }}>If You Rent & Invest</p>
-              <p style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '4px', marginBottom: 0 }}>${finalRent.toLocaleString()}</p>
+              <p style={{ fontSize: '12px', fontWeight: '600', opacity: 0.9, margin: 0 }}>If You Rent & Invest</p>
+              <p style={{ fontSize: isMobile ? '42px' : '24px', fontWeight: '600', marginTop: '4px', marginBottom: 0 }}>${finalRent.toLocaleString()}</p>
               <p style={{ fontSize: '11px', marginTop: '4px', marginBottom: 0, opacity: 0.8 }}>after {values.timeHorizon} years</p>
             </div>
             <div
@@ -329,8 +329,8 @@ function App() {
                 border: '2px solid #a9e4ef',
               }}
             >
-              <p style={{ fontSize: '12px', fontWeight: 'bold', color: '#2d1e2f', margin: 0 }}>{winner} builds more wealth</p>
-              <p style={{ fontSize: '20px', fontWeight: '800', marginTop: '4px', marginBottom: 0, color: '#5171a5' }}>
+              <p style={{ fontSize: '12px', fontWeight: '600', color: '#2d1e2f', margin: 0 }}>{winner} builds more wealth</p>
+              <p style={{ fontSize: isMobile ? '46px' : '26px', fontWeight: '700', marginTop: '4px', marginBottom: 0, color: '#5171a5' }}>
                 by ${Math.abs(Math.round(difference)).toLocaleString()}
               </p>
               <p style={{ fontSize: '11px', marginTop: '4px', marginBottom: 0, color: '#2d1e2f' }}>over {values.timeHorizon} years</p>
