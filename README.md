@@ -29,7 +29,7 @@ These inputs allow the tool to model real-world trade-offs accurately while keep
 ## Tech Stack
 
 - **React** – Frontend framework (using Vite for fast development)
-- **Tailwind CSS** – Styling and responsive layout
+- **CSS** – Custom styling and responsive layout
 - **LocalStorage** – Persists user inputs between sessions
 - **Chart.js** (with react-chartjs-2) – Visualizes net worth growth over time
-- Plain JavaScript/TypeScript for all financial calculations (no external APIs)
+- Plain JavaScript for all financial calculations (no external APIs)

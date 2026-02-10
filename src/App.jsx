@@ -188,12 +188,12 @@ function App() {
   return (
     <div className="min-h-screen py-4 px-8" style={{ backgroundColor: '#fff8f0', paddingLeft: '8px', paddingRight: '8px' }}>
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-6" style={{ color: '#1f2937' }}>
+        <h1 className="text-3xl font-bold text-center" style={{ color: '#1f2937', marginBottom: '24px' }}>
           Buy vs. Rent Calculator
         </h1>
 
         {/* Inputs Section */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 mb-6" style={{ border: '1px solid #f3f4f6' }}>
+        <div className="card-panel" style={{ padding: '20px', marginBottom: '24px' }}>
           <h2 className="font-semibold" style={{ color: '#1f2937', textAlign: 'left', fontSize: '26px', marginTop: 0, marginBottom: '8px' }}>Inputs</h2>
 
           {/* Core Inputs */}
@@ -271,11 +271,12 @@ function App() {
             <div
               className="result-card"
               style={{
-                borderRadius: '12px',
-                padding: '10px 12px',
+                borderRadius: '16px',
+                padding: '16px 20px',
                 color: 'white',
                 textAlign: 'center',
-                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 24px rgba(0, 0, 0, 0.03)',
+                border: '1px solid rgba(0, 0, 0, 0.06)',
                 backgroundColor: '#2563eb',
               }}
             >
@@ -286,11 +287,12 @@ function App() {
             <div
               className="result-card"
               style={{
-                borderRadius: '12px',
-                padding: '10px 12px',
+                borderRadius: '16px',
+                padding: '16px 20px',
                 color: 'white',
                 textAlign: 'center',
-                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 24px rgba(0, 0, 0, 0.03)',
+                border: '1px solid rgba(0, 0, 0, 0.06)',
                 backgroundColor: '#10b981',
               }}
             >
@@ -301,10 +303,10 @@ function App() {
             <div
               className="result-card"
               style={{
-                borderRadius: '12px',
-                padding: '10px 12px',
+                borderRadius: '16px',
+                padding: '16px 20px',
                 textAlign: 'center',
-                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 24px rgba(0, 0, 0, 0.03)',
                 backgroundColor: difference > 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(37, 99, 235, 0.1)',
                 border: difference > 0 ? '2px solid rgba(16, 185, 129, 0.3)' : '2px solid rgba(37, 99, 235, 0.3)',
               }}
@@ -318,7 +320,7 @@ function App() {
           </div>
 
         {/* Chart Below */}
-        <div className="bg-white rounded-2xl shadow-xl chart-section" style={{ border: '1px solid #f3f4f6' }}>
+        <div className="card-panel chart-section">
           <div className="chart-height">
             <Line data={chartData} options={chartOptions} />
           </div>
