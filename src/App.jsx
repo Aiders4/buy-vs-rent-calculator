@@ -16,6 +16,21 @@ import './App.css';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
+const TOOLTIPS = {
+  homePrice: 'Total purchase price of the property you\'re considering',
+  downPayment: 'Amount paid upfront, reducing the size of your mortgage',
+  mortgageRate: 'Annual interest rate charged on your mortgage loan',
+  mortgageTerm: 'How long you have to repay the mortgage in full',
+  homeAppreciation: 'Expected annual increase in your home\'s market value',
+  initialRent: 'Your current monthly rent payment',
+  rentIncrease: 'Expected annual increase in your rent, typically tied to inflation',
+  investmentReturn: 'Expected annual return if you invest savings in the market instead of buying',
+  timeHorizon: 'How long you plan to stay before selling or moving — longer horizons tend to favour buying',
+  closingCostsPercent: 'One-time fees at purchase (legal, appraisal, etc.) as a percentage of home price',
+  sellingCostsPercent: 'Fees when selling (agent commission, transfer taxes) as a percentage of sale price',
+  annualOwnershipPercent: 'Yearly costs beyond the mortgage (property tax, insurance, maintenance) as a percentage of home value',
+};
+
 const DEFAULT_VALUES = {
   homePrice: 500000,
   downPayment: 100000,
@@ -208,6 +223,7 @@ function App() {
                   <label className="font-medium" style={{ color: '#1f2937', textAlign: 'left', fontSize: '15px' }}>
                     {formatLabel(key)}
                     {isPercentage ? ' (%)' : isCurrency ? ' ($)' : ' (years)'}
+                    <span className="tooltip-trigger" data-tooltip={TOOLTIPS[key]}>&#9432;</span>
                   </label>
                   <div></div>
                   <input
@@ -248,7 +264,8 @@ function App() {
                 {['closingCostsPercent', 'sellingCostsPercent', 'annualOwnershipPercent'].map(key => (
                   <div key={key} style={{ display: 'grid', gridTemplateColumns: '230px 12px 73px', alignItems: 'center' }}>
                     <label className="font-medium" style={{ color: '#1f2937', textAlign: 'left', fontSize: '15px' }}>
-                      {formatLabel(key)} (%)
+                      {formatLabel(key).replace(' Percent', '')} (%)
+                      <span className="tooltip-trigger" data-tooltip={TOOLTIPS[key]}>&#9432;</span>
                     </label>
                     <div></div>
                     <input
