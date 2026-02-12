@@ -41,23 +41,24 @@
 }
 
 .inputs-grid {
-  grid-template-columns: repeat(1, 1fr);
-}
-
-.inputs-grid > div {
-  margin-bottom: 4px;
+  grid-template-columns: 1fr;
+  gap: 12px 16px;
 }
 
 @media (min-width: 768px) {
   .inputs-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px 24px;
   }
 }
 
-@media (min-width: 1024px) {
-  .inputs-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+.input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding: 2px 0;
 }
 
 /* Tooltip info icons */
@@ -124,14 +125,16 @@
 
 /* Input fields */
 .input-field {
-  width: 73px;
-  padding: 6px 12px;
+  width: 100px;
+  flex-shrink: 0;
+  padding: 6px 8px;
   border: 2px solid #e5e7eb;
   border-radius: 8px;
   color: #1f2937;
   background-color: #ffffff;
   text-align: right;
   outline: none;
+  box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -148,23 +151,24 @@
 .result-cards {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
 .result-cards .result-card {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
   .result-cards {
     flex-direction: row;
-    flex-wrap: nowrap;
   }
 
   .result-cards .result-card {
-    width: 160px;
-    flex: 0 0 auto;
+    flex: 1 1 0%;
+    width: auto;
   }
 }
 
@@ -178,7 +182,7 @@
 
 /* Chart section */
 .chart-section {
-  padding: 12px;
+  padding: 8px;
 }
 
 .chart-height {

@@ -201,15 +201,15 @@ function App() {
   const formatLabel = (key) => key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
 
   return (
-    <div className="min-h-screen py-4 px-8" style={{ backgroundColor: '#fff8f0', paddingLeft: '8px', paddingRight: '8px' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#fff8f0', padding: '4px 2px' }}>
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-center" style={{ color: '#1f2937', marginBottom: '24px' }}>
+        <h1 className="text-3xl font-bold text-center" style={{ color: '#1f2937', marginBottom: '12px' }}>
           Buy vs. Rent Calculator
         </h1>
 
         {/* Inputs Section */}
-        <div className="card-panel" style={{ padding: '20px', marginBottom: '24px' }}>
-          <h2 className="font-semibold" style={{ color: '#1f2937', textAlign: 'left', fontSize: '26px', marginTop: 0, marginBottom: '8px' }}>Inputs</h2>
+        <div className="card-panel" style={{ padding: '12px', marginBottom: '16px' }}>
+          <h2 className="font-semibold" style={{ color: '#1f2937', textAlign: 'left', fontSize: '20px', marginTop: 0, marginBottom: '4px' }}>Inputs</h2>
 
           {/* Core Inputs */}
           <div className="inputs-grid grid mb-6">
@@ -219,13 +219,12 @@ function App() {
               const isYears = key.includes('Term') || key.includes('Horizon');
               
               return (
-                <div key={key} style={{ display: 'grid', gridTemplateColumns: '230px 12px 73px', alignItems: 'center' }}>
+                <div key={key} className="input-row">
                   <label className="font-medium" style={{ color: '#1f2937', textAlign: 'left', fontSize: '15px' }}>
                     {formatLabel(key)}
                     {isPercentage ? ' (%)' : isCurrency ? ' ($)' : ' (years)'}
                     <span className="tooltip-trigger" data-tooltip={TOOLTIPS[key]}>&#9432;</span>
                   </label>
-                  <div></div>
                   <input
                     type="number"
                     step={isPercentage ? '0.1' : '1'}
@@ -260,14 +259,13 @@ function App() {
             </button>
 
             {showAdvanced && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4" style={{ borderTop: '1px solid #f3f4f6' }}>
+              <div className="inputs-grid pt-4" style={{ borderTop: '1px solid #f3f4f6' }}>
                 {['closingCostsPercent', 'sellingCostsPercent', 'annualOwnershipPercent'].map(key => (
-                  <div key={key} style={{ display: 'grid', gridTemplateColumns: '230px 12px 73px', alignItems: 'center' }}>
+                  <div key={key} className="input-row">
                     <label className="font-medium" style={{ color: '#1f2937', textAlign: 'left', fontSize: '15px' }}>
                       {formatLabel(key).replace(' Percent', '')} (%)
                       <span className="tooltip-trigger" data-tooltip={TOOLTIPS[key]}>&#9432;</span>
                     </label>
-                    <div></div>
                     <input
                       type="number"
                       step="0.1"
@@ -289,7 +287,7 @@ function App() {
               className="result-card"
               style={{
                 borderRadius: '16px',
-                padding: '16px 20px',
+                padding: '12px 16px',
                 color: 'white',
                 textAlign: 'center',
                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 24px rgba(0, 0, 0, 0.03)',
@@ -305,7 +303,7 @@ function App() {
               className="result-card"
               style={{
                 borderRadius: '16px',
-                padding: '16px 20px',
+                padding: '12px 16px',
                 color: 'white',
                 textAlign: 'center',
                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 24px rgba(0, 0, 0, 0.03)',
@@ -321,7 +319,7 @@ function App() {
               className="result-card"
               style={{
                 borderRadius: '16px',
-                padding: '16px 20px',
+                padding: '12px 16px',
                 textAlign: 'center',
                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 24px rgba(0, 0, 0, 0.03)',
                 backgroundColor: difference > 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(37, 99, 235, 0.1)',
